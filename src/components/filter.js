@@ -4,15 +4,6 @@ import MovieList from "./movielist";
 const Filter = ({ movies }) => {
   const [title, setTitle] = useState("");
   const [minRating, setMinRating] = useState(0);
-  const [filteredMovies, setFilteredMovies] = useState(movies);
-  const [showNoResults, setShowNoResults] = useState(false);
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-  };
-
-  const handleRatingChange = (e) => {
-    setMinRating(e.target.value);
-  };
   const onFilter = (movies, title, minRating) => {
     if (title === "" && minRating === 0) {
       return movies;
@@ -20,23 +11,26 @@ const Filter = ({ movies }) => {
       return movies.filter((item) => item.rating >= minRating);
     } else if (title !== "" && minRating >= 0) {
       return movies.filter(
-        (item) => item.title === title && item.rating >= minRating
+        (item) =>
+          item.title.toLowerCase() === title.toLowerCase() &&
+          item.rating >= minRating
       );
     } else {
       return movies.filter(
-        (item) => item.titel === title && item.rating >= minRating
+        (item) =>
+          item.titel.toLowerCase() === title.toLowerCase() &&
+          item.rating >= minRating
       );
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setFilteredMovies(onFilter(movies, title, minRating));
-    setShowNoResults(false);
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
   };
-  if (filteredMovies.length === 0 && showNoResults === false) {
-    setShowNoResults(true);
-  }
+
+  const handleRatingChange = (e) => {
+    setMinRating(e.target.value);
+  };
 
   return (
     <div
@@ -48,7 +42,7 @@ const Filter = ({ movies }) => {
       }}
     >
       {/**************Filter Movies****************/}
-      <Form onSubmit={handleSubmit}>
+      <Form>
         <Row className="mb-3">
           <Form.Group
             className="mb-3"
@@ -93,28 +87,17 @@ const Filter = ({ movies }) => {
               step="0.1"
             />
           </Form.Group>
-          <button
-            type="submit"
-            style={{
-              width: "10%",
-              padding: "0px",
-              margin: "10px",
-              border: "2px solid purple",
-              borderRadius: "10px",
-              fontSize: "15px",
-              fontWeight: "bold",
-            }}
-            className="mb-3"
-          >
-            Filter
-          </button>
         </Row>
         <hr />
       </Form>
 
       {/**************Filter Movies****************/}
-      {showNoResults && <h1>Nothing was found !</h1>}
-      {!showNoResults && <MovieList movies={filteredMovies} />}
+      {onFilter(movies, title, minRating).length === 0 && (
+        <h1>No Items Found!</h1>
+      )}
+      {!(onFilter(movies, title, minRating).length === 0) && (
+        <MovieList movies={onFilter(movies, title, minRating)} />
+      )}
     </div>
   );
 };
