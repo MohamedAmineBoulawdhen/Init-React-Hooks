@@ -35,6 +35,5 @@ Filter component is used to filter movies by title and rating. The component con
 Feel free to customize the components as per your requirements. You can change the styling, add or remove attributes, or add new features.
 
 Enjoy movie time with your favorite movies! 🎬
---- 
-Don't hesitate to leave a star ⭐️ if you found it useful!
+
 
